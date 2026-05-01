@@ -1,11 +1,14 @@
-// src/server.js
-const express = require('express');
+import express from 'express';
+import { PORT } from './constants/app.constants.js';
+import connectDB from './config/db.js';
+import dotenv from "dotenv";
+
+dotenv.config();
+
 const app = express();
-const PORT = require('./constants/app.constants').PORT;
 
 app.use(express.json());
 
-// Health check route
 app.get('/', (req, res) => {
   res.status(200).json({ message: 'School ERP Backend is running.' });
 });
@@ -13,3 +16,5 @@ app.get('/', (req, res) => {
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });
+
+connectDB();

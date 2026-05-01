@@ -30,3 +30,4 @@ build/
 
 # Misc
 *.local
+.env
