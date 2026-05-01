@@ -1,0 +1,19 @@
+{
+  "name": "school_erp_be",
+  "version": "1.0.0",
+  "description": "school management system",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/skkaushik/school_erp_be.git"
+  },
+  "author": "sachin kaushik",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/skkaushik/school_erp_be/issues"
+  },
+  "homepage": "https://github.com/skkaushik/school_erp_be#readme"
+}
