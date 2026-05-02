@@ -1,112 +1,38 @@
 import studentsModal from "../models/students.js";
+import { ApiError } from "../utils/ApiError.js";
+import { asyncHandler } from "../utils/asyncHandler.js";
+import { ApiResponse } from "../utils/ApiResponse.js";
 
-export const createstudent = async (req, res) => {
-    const { body } = req;
+export const createstudent = asyncHandler(async (req, res) => {
+    const result = await studentsModal.create(req.body);
+    return res.status(201).json(new ApiResponse(201, result, "Student created successfully"));
+});
 
-    try {
-        const result = await studentsModal.create(body);
-        res.status(201).json({
-            success: true,
-            message: "Student created successfully",
-            data: result
-        })
-    } catch (error) {
-        console.log(error)
-        res.status(500).json({
-            success: false,
-            message: error.message,
-        })
+export const getAllStudents = asyncHandler(async (req, res) => {
+    const students = await studentsModal.find();
+    return res.status(200).json(new ApiResponse(200, students, "Student data fetched successfully"));
+});
+
+export const getStudentById = asyncHandler(async (req, res) => {
+    const student = await studentsModal.findById(req.params.id);
+    if (!student) {
+        throw new ApiError(404, "Student not found");
     }
-}
+    return res.status(200).json(new ApiResponse(200, student, "Student details fetched successfully"));
+});
 
-export const getAllStudents = async (req, res) => {
-    try {
-        const students = await studentsModal.find();
-
-        res.status(200).json({
-            success: true,
-            message: 'Student data fetched successfully',
-            data: students
-        })
-
-    } catch (error) {
-        console.log(error)
-        res.status(500).json({
-            success: false,
-            message: error.message
-        })
+export const updateStudent = asyncHandler(async (req, res) => {
+    const updatedStudent = await studentsModal.findByIdAndUpdate(req.params.id, req.body, { new: true });
+    if (!updatedStudent) {
+        throw new ApiError(404, "Student not found");
     }
-}
+    return res.status(200).json(new ApiResponse(200, updatedStudent, "Student updated successfully"));
+});
 
-export const getStudentById = async (req, res) => {
-    try {
-        const student = await studentsModal.findById(req.params.id);
-        if (!student) {
-            return res.status(404).json({
-                success: false,
-                message: 'Student not found'
-            });
-        }
-        res.status(200).json({
-            success: true,
-            message: 'Student details fetched successfully',
-            data: student
-        });
-    } catch (error) {
-        console.log(error)
-        res.status(500).json({
-            success: false,
-            message: error.message
-        });
+export const deleteStudent = asyncHandler(async (req, res) => {
+    const deletedStudent = await studentsModal.findByIdAndDelete(req.params.id);
+    if (!deletedStudent) {
+        throw new ApiError(404, "Student not found");
     }
-}
-
-export const updateStudent = async (req, res) => {
-    try {
-        const updatedStudent = await studentsModal.findByIdAndUpdate(
-            req.params.id,
-            req.body,
-            { new: true }
-        );
-        if (!updatedStudent) {
-            return res.status(404).json({
-                success: false,
-                message: 'Student not found'
-            });
-        }
-        res.status(200).json({
-            success: true,
-            message: 'Student updated successfully',
-            data: updatedStudent
-        });
-    } catch (error) {
-        console.log(error)
-        res.status(500).json({
-            success: false,
-            message: error.message
-        });
-    }
-}
-
-export const deleteStudent = async (req, res) => {
-    try {
-        const deletedStudent = await studentsModal.findByIdAndDelete(req.params.id);
-        if (!deletedStudent) {
-            return res.status(404).json({
-                success: false,
-                message: 'Student not found'
-            });
-        }
-        res.status(200).json({
-            success: true,
-            message: 'Student deleted successfully',
-            data: deletedStudent
-        });
-    } catch (error) {
-        console.log(error)
-        res.status(500).json({
-            success: false,
-            message: error.message
-        });
-    }
-}
+    return res.status(200).json(new ApiResponse(200, deletedStudent, "Student deleted successfully"));
+});
